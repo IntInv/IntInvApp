@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.intinv.intinvapp.ui.theme.IntInvAppTheme
 
+const val LOG_TAG = "MainActivityLog"
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,25 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        testJedis()
+    }
+
+    private fun testJedis() {
+        /*val pool = JedisPool("10.0.2.2", 6379)
+        pool.resource.use {
+            it.set("clientName", "androidJedis")
+
+            val jedisPubSub = object : JedisPubSub() {
+                override fun onMessage(channel: String?, message: String?) {
+                    super.onMessage(channel, message)
+                    Log.d(LOG_TAG, "receiving message -$message- from channel $channel")
+                }
+            }
+
+            it.subscribe(jedisPubSub, "mobiledev")
+            it.set("foo", "bar")
+            Log.d(LOG_TAG, it.get("foo"))
+        }*/
     }
 }
 

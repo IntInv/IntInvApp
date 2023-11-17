@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.intinv.intinvapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.intinv.intinvapp"
@@ -61,7 +61,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     // Network
-    implementation("redis.clients:jedis:5.0.2")
+    implementation("redis.clients:jedis:5.0.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     // DB
