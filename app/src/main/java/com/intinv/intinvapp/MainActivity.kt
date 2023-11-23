@@ -32,6 +32,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun testJedis() {
+        // TODO - make request to redis with proxying by ktor REST service
+        // TODO - enter token with UI, not hardcode it
         /*val pool = JedisPool("10.0.2.2", 6379)
         pool.resource.use {
             it.set("clientName", "androidJedis")
