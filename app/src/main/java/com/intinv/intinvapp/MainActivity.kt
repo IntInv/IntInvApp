@@ -25,10 +25,12 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Greeting("Android")
+//                    PortfolioPage()
+                    PortfolioDetailPage()
                 }
             }
         }
-        testJedis()
+//        testJedis()
     }
 
     private fun testJedis() {

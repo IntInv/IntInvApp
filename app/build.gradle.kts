@@ -59,6 +59,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material")
 
     // Network
     implementation("redis.clients:jedis:5.0.0")
@@ -78,4 +79,7 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+
+
 }
