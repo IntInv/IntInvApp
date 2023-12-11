@@ -3,48 +3,42 @@ package com.intinv.intinvapp
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.AppYellow
 import java.util.Calendar
@@ -54,10 +48,9 @@ import java.util.Locale
 @Composable
 fun AddTransactionDialog(stateDialog: MutableState<Boolean>){
     val listTypeTransaction = listOf("Buy","Sell","Dividend","Input", "Output")
-    val selectedTypeIndex = remember { mutableStateOf(1) }
+    val selectedTypeIndex = remember { mutableIntStateOf(1) }
     val nameTicketValue = remember{ mutableStateOf("")}
     val quantityValue = remember{ mutableStateOf("")}
-    val dateTimeValue = remember{ mutableStateOf("")}
     val priceValue = remember{ mutableStateOf("")}
     val calendar = remember { Calendar.getInstance() }
     AlertDialog(modifier = Modifier.fillMaxWidth(),
@@ -89,12 +82,12 @@ fun AddTransactionDialog(stateDialog: MutableState<Boolean>){
             TabRow(modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp),
-                selectedTabIndex = selectedTypeIndex.value,
+                selectedTabIndex = selectedTypeIndex.intValue,
                 backgroundColor = Color.Transparent,
                 contentColor = Color.Black ) {
                 listTypeTransaction.forEachIndexed{index, text ->
-                Tab(selected = selectedTypeIndex.value == index,
-                    onClick = { selectedTypeIndex.value = index },
+                Tab(selected = selectedTypeIndex.intValue == index,
+                    onClick = { selectedTypeIndex.intValue = index },
                     selectedContentColor = AppYellow,
                     unselectedContentColor = AppGray,
                     modifier = Modifier.wrapContentWidth()) {
@@ -132,18 +125,21 @@ fun AddTransactionDialog(stateDialog: MutableState<Boolean>){
                     fontSize = 14.0.sp,
                     modifier =  Modifier.padding(top = 10.dp))
 
-
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
                     value = quantityValue.value,
                     singleLine = true,
-                    onValueChange = {quantityValue.value = it},
+                    onValueChange = {
+                        quantityValue.value = it
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor=Color.Black,
                         backgroundColor = AppGray,),
                     textStyle = TextStyle.Default.copy(fontSize = 14.sp),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number)
                 )
 
                 Text(text = "Date Time",
@@ -169,6 +165,8 @@ fun AddTransactionDialog(stateDialog: MutableState<Boolean>){
                         textColor=Color.Black,
                         backgroundColor = AppGray,),
                     textStyle = TextStyle.Default.copy(fontSize = 14.sp),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number)
                 )
 
             }
