@@ -21,9 +21,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +38,10 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import com.intinv.intinvapp.ui.theme.AppGray
+import com.intinv.intinvapp.ui.theme.AppYellow
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -47,6 +51,12 @@ import java.util.Date
 @Preview(widthDp = 390, heightDp = 844)
 @Composable
 fun PortfolioDetailPage(){
+    val stateDialog = remember {
+        mutableStateOf(false)
+    }
+    if (stateDialog.value){
+        AddTransactionDialog(stateDialog = stateDialog)
+    }
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -65,7 +75,7 @@ fun PortfolioDetailPage(){
                 IconButton(onClick = { }) {
                     Icon(
                         Icons.Filled.ArrowBack,
-                        contentDescription = "Информация о приложении",
+                        contentDescription = "",
                         modifier = Modifier.padding(2.dp)
                     )
                 }
@@ -97,16 +107,13 @@ fun PortfolioDetailPage(){
             History()
         }
         Button(
-            onClick = {},
+            onClick = {
+                stateDialog.value = true
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(PaddingValues(top = 5.dp)),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(
-                alpha = 255,
-                red = 237,
-                green = 242,
-                blue = 11
-            )
+            colors = ButtonDefaults.buttonColors(backgroundColor = AppYellow
             )
 
         ) {
@@ -178,12 +185,7 @@ fun Detail(modifier: Modifier, UserName: String, AlocateValue: Double, LotValue:
             )
         )
         .background(
-            Color(
-                alpha = 255,
-                red = 242,
-                green = 244,
-                blue = 246
-            ),
+            AppGray,
             shape = RoundedCornerShape(20.dp)
         )) {
         Text(modifier = Modifier.padding(PaddingValues(start = 10.dp)),
@@ -238,7 +240,7 @@ fun Detail(modifier: Modifier, UserName: String, AlocateValue: Double, LotValue:
                 Text(
                     fontFamily = inter,
                     fontSize = 12.0.sp,
-                    text = AlocateValue.toString()
+                    text = "$AlocateValue %"
                 )
                 Text(
                     fontFamily = inter,
@@ -280,12 +282,7 @@ fun History() {
                 )
             )
             .background(
-                Color(
-                    alpha = 255,
-                    red = 242,
-                    green = 244,
-                    blue = 246
-                ),
+                AppGray,
                 shape = RoundedCornerShape(20.dp)
             )
     ) {

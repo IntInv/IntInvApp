@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Greeting("Android")
 //                    PortfolioPage()
-                    PortfolioDetailPage()
+//                    PortfolioDetailPage()
                 }
             }
         }

@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
+import com.intinv.intinvapp.ui.theme.AppYellow
 
 @Preview(widthDp = 390, heightDp = 844)
 @Composable
@@ -64,12 +65,7 @@ fun Portfolio(fullValue: Double, fullProfLossValue: Double, captioValue: Double,
             )
         )
         .background(
-            Color(
-                alpha = 255,
-                red = 237,
-                green = 242,
-                blue = 11
-            ),
+            AppYellow,
             shape = RoundedCornerShape(20.dp)
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,7 +75,7 @@ fun Portfolio(fullValue: Double, fullProfLossValue: Double, captioValue: Double,
             text = "Portfolio")
         Text(fontFamily=inter,
             fontSize = 24.0.sp,
-            text = fullValue.toString() + " ₽")
+            text = "$fullValue ₽")
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp),
@@ -92,7 +88,7 @@ fun Portfolio(fullValue: Double, fullProfLossValue: Double, captioValue: Double,
                     text = "Profit/Loss")
                 Text(fontFamily=inter,
                     fontSize = 12.0.sp,
-                    text = fullProfLossValue.toString() + " ₽",
+                    text = "$fullProfLossValue ₽",
                     color = if (fullProfLossValue > 0) Color.Green else Color.Red)
             }
             Column(){
@@ -101,7 +97,7 @@ fun Portfolio(fullValue: Double, fullProfLossValue: Double, captioValue: Double,
                     text = "Cation gain")
                 Text(fontFamily=inter,
                     fontSize = 12.0.sp,
-                    text = captioValue.toString() + " ₽",
+                    text = "$captioValue ₽",
                     color = if (captioValue > 0) Color.Green else Color.Red)
             }
             Column(){
@@ -110,7 +106,7 @@ fun Portfolio(fullValue: Double, fullProfLossValue: Double, captioValue: Double,
                     text = "Open")
                 Text(fontFamily=inter,
                     fontSize = 12.0.sp,
-                    text = openValue.toString() + " ₽")
+                    text = "$openValue  ₽")
             }
         }
     }
@@ -180,14 +176,14 @@ fun itemList(name: String, fullName: String, InvValue: Double, ProfValue: Double
             horizontalArrangement = Arrangement.SpaceBetween){
             Text(fontFamily=inter,
                 fontSize = 12.0.sp,
-                text = InvValue.toString() + " ₽")
+                text = "$InvValue ₽")
             Text(fontFamily=inter,
                 fontSize = 12.0.sp,
-                text = ProfValue.toString() + " ₽",
+                text = "$ProfValue ₽",
                 color = if (ProfValue > 0) Color.Green else Color.Red)
             Text(fontFamily=inter,
                 fontSize = 12.0.sp,
-                text = AlocateValue.toString() + " Lot")
+                text =  "$AlocateValue Lot")
         }
     }
 }

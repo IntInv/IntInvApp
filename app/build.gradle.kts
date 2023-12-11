@@ -61,6 +61,10 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material")
 
+    val nav_version = "2.7.5"
+    implementation ("androidx.navigation:navigation-compose:$nav_version")
+
+
     // Network
     implementation("redis.clients:jedis:5.0.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -79,6 +83,7 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
 
 
 
