@@ -3,6 +3,7 @@ package com.intinv.intinvapp
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +24,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,17 +39,18 @@ import com.intinv.intinvapp.ui.theme.AppYellow
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@Preview(widthDp = 390, heightDp = 844)
+//@Preview(widthDp = 390, heightDp = 844)
 @Composable
-fun PortfolioDetailPage(){
+fun PortfolioDetailPage(clickBack: () -> Unit, selectedDetailName: MutableState<String>){
     val stateDialog = remember {
         mutableStateOf(false)
     }
     if (stateDialog.value){
-        AddTransactionDialog(stateDialog = stateDialog)
+        AddTransactionDialog(clickBack = {stateDialog.value = false}, stateDialog = stateDialog)
     }
     Column(modifier = Modifier
-        .fillMaxSize()
+        .fillMaxWidth()
+        .fillMaxHeight(0.95f)
         .background(Color.White)
         .padding(20.dp),
         verticalArrangement = Arrangement.SpaceBetween
@@ -65,7 +68,7 @@ fun PortfolioDetailPage(){
                     Icon(
                         Icons.Filled.ArrowBack,
                         contentDescription = "",
-                        modifier = Modifier.padding(2.dp)
+                        modifier = Modifier.padding(2.dp).clickable { clickBack() }
                     )
                 }
                 Text(

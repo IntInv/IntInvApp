@@ -2,6 +2,7 @@ package com.intinv.intinvapp
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,9 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.intinv.intinvapp.ui.theme.AppYellow
 
-@Preview(widthDp = 390, heightDp = 844)
+//@Preview(widthDp = 390, heightDp = 844)
 @Composable
-fun PortfolioPage(){
+fun PortfolioPage(clickDetail: (String)->Unit){
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color.White),
@@ -36,7 +37,7 @@ fun PortfolioPage(){
     ) {
         Logo()
         Portfolio(fullValue =  3366924.0, fullProfLossValue = -37410.0, captioValue = -2.3, openValue = 23231.0 )
-        stockList()
+        stockList(clickDetail)
     }
 }
 
@@ -104,16 +105,16 @@ fun Portfolio(fullValue: Double, fullProfLossValue: Double, captioValue: Double,
 
 
 @Composable
-fun stockList (){
+fun stockList (clickDetail: (name: String)->Unit){
     LazyColumn(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        item{itemList("GOTO", "GoTo Gojek Tokopedia Tbk", 1674678.0, -52742.0, 20.0)}
-        item{itemList("PTBA", "Bukit Asam Tbk", 237588.0, 2765.0, 20.0)}
-        item{itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0)}
+        item{itemList("GOTO", "GoTo Gojek Tokopedia Tbk", 1674678.0, -52742.0, 20.0, clickDetail)}
+        item{itemList("PTBA", "Bukit Asam Tbk", 237588.0, 2765.0, 20.0, clickDetail)}
+        item{itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0, clickDetail)}
 //        item{itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0)}
 //        item{itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0)}
 //        item{itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0)}
@@ -125,13 +126,20 @@ fun stockList (){
 
 
 @Composable
-fun itemList(name: String, fullName: String, InvValue: Double, ProfValue: Double, AlocateValue: Double){
-    Column(modifier =  Modifier.heightIn(min = 60.dp, max = 100.dp)){
+fun itemList(name: String, fullName: String, InvValue: Double, ProfValue: Double, AlocateValue: Double, clickDetail: (name: String)->Unit){
+    Column(modifier = Modifier
+        .heightIn(min = 60.dp, max = 100.dp)
+        .clickable {
+            clickDetail(name)
+        }){
         Row(){
             Image(painter = painterResource(id = R.drawable.home_icon1),  contentDescription = "Icon",
-                modifier = Modifier.size(45.dp)
+                modifier = Modifier
+                    .size(45.dp)
                     .padding(5.dp))
-            Column(modifier = Modifier.heightIn(max = 45.dp).fillMaxHeight(),
+            Column(modifier = Modifier
+                .heightIn(max = 45.dp)
+                .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center){
                 Text(fontFamily=inter,
                     fontSize = 14.0.sp,

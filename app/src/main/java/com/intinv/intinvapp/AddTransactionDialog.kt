@@ -46,9 +46,9 @@ import java.util.Locale
 
 
 @Composable
-fun AddTransactionDialog(stateDialog: MutableState<Boolean>){
+fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDialog: MutableState<Boolean>){
     val listTypeTransaction = listOf("Buy","Sell","Dividend","Input", "Output")
-    val selectedTypeIndex = remember { mutableIntStateOf(1) }
+    val selectedTypeIndex = remember { mutableIntStateOf(0) }
     val nameTicketValue = remember{ mutableStateOf("")}
     val quantityValue = remember{ mutableStateOf("")}
     val priceValue = remember{ mutableStateOf("")}
@@ -71,6 +71,7 @@ fun AddTransactionDialog(stateDialog: MutableState<Boolean>){
                         Icons.Filled.ArrowBack,
                         contentDescription = "",
                         modifier = Modifier.padding(2.dp)
+                            .clickable { clickBack() }
                     )
                 }
                 Text(

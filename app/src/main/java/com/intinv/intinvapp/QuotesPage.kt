@@ -17,6 +17,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.intinv.intinvapp.ui.theme.AppYellow
 
-@Preview(widthDp = 390, heightDp = 844)
+//@Preview(widthDp = 390, heightDp = 844)
 @Composable
 fun QuotesPage(){
     Column(modifier = Modifier
@@ -42,31 +45,43 @@ fun QuotesPage(){
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            item{itemQuotes("GOTO", "GoTo Gojek Tokopedia Tbk", 16778.0, -25.0,)}
-            item{itemQuotes("PTBA", "Bukit Asam Tbk", 2358.0, 15.2)}
-            item{itemQuotes("ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
-            item{itemQuotes("ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
-            item{itemQuotes("ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
-            item{itemQuotes("ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
-            item{itemQuotes("ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
-            item{itemQuotes("ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
-            item{itemQuotes("ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
-            item{itemQuotes("ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
+            item{itemQuotes("17:13:00","GOTO", "GoTo Gojek Tokopedia Tbk", 16778.0, -25.0,)}
+            item{itemQuotes("17:13:00","PTBA", "Bukit Asam Tbk", 2358.0, 15.2)}
+            item{itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
+            item{itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
+            item{itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
+            item{itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
+            item{itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
+            item{itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
+            item{itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
+            item{itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7)}
 
         }
     }
 }
 
 @Composable
-fun itemQuotes(name: String, fullName: String, priceValue: Double, changeValue: Double){
+fun itemQuotes(curentTime: String, name: String, fullName: String, priceValue: Double, changeValue: Double){
+    val stateDialog = remember {
+        mutableStateOf(false)
+    }
+    if(stateDialog.value){
+        AddTransactionDialog(
+            clickBack = { stateDialog.value = false },
+            stateDialog = stateDialog)
+    }
     Column(modifier = Modifier
         .heightIn(min = 60.dp, max = 100.dp)
         .padding(5.dp)
-        .clickable(onClick = { /*TODO*/ })){
+        .clickable(onClick = {stateDialog.value = true})
+        ){
         Row(){
             Image(painter = painterResource(id = R.drawable.home_icon1),  contentDescription = "Icon",
                 modifier = Modifier.size(45.dp))
-            Column(modifier = Modifier.heightIn(max = 45.dp).fillMaxHeight().padding(5.dp),
+            Column(modifier = Modifier
+                .heightIn(max = 45.dp)
+                .fillMaxHeight()
+                .padding(5.dp),
                 verticalArrangement = Arrangement.Center){
                 Text(fontFamily=inter,
                     fontSize = 14.0.sp,
@@ -86,6 +101,9 @@ fun itemQuotes(name: String, fullName: String, priceValue: Double, changeValue: 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
                 Text(fontFamily=inter,
                     fontSize = 12.0.sp,
+                    text = "Time")
+                Text(fontFamily=inter,
+                    fontSize = 12.0.sp,
                     text = "Last price")
                 Text(fontFamily=inter,
                     fontSize = 12.0.sp,
@@ -96,6 +114,9 @@ fun itemQuotes(name: String, fullName: String, priceValue: Double, changeValue: 
             .fillMaxWidth()
             .padding(2.dp),
             horizontalArrangement = Arrangement.SpaceBetween){
+            Text(fontFamily=inter,
+                fontSize = 12.0.sp,
+                text = curentTime)
             Text(fontFamily=inter,
                 fontSize = 12.0.sp,
                 text = "$priceValue ₽")

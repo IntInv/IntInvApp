@@ -1,15 +1,20 @@
 package com.intinv.intinvapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraph
+import androidx.navigation.compose.rememberNavController
 import com.intinv.intinvapp.ui.theme.IntInvAppTheme
 
 const val LOG_TAG = "MainActivityLog"
@@ -24,9 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
-//                    PortfolioPage()
-//                    PortfolioDetailPage()
+                    MainScreen()
                 }
             }
         }
@@ -51,6 +54,18 @@ class MainActivity : ComponentActivity() {
             it.set("foo", "bar")
             Log.d(LOG_TAG, it.get("foo"))
         }*/
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun MainScreen(){
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = {menuBar(navController = navController)}
+    ) {
+        navigationMain(navHostController = navController)
     }
 }
 
