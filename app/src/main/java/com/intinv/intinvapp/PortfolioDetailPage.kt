@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -31,22 +30,49 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.intinv.intinvapp.data.DataPortfolioDetail
+import com.intinv.intinvapp.data.DataTransaction
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.AppYellow
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 
 //@Preview(widthDp = 390, heightDp = 844)
 @Composable
 fun PortfolioDetailPage(clickBack: () -> Unit, selectedDetailName: MutableState<String>){
+
+    val cal = Calendar.getInstance()
+    cal.setTime(Date(1565209665.toLong()));
+    val tetsHist = DataTransaction(
+        type = "Buy",
+        name = "ACES",
+        dateTransaction = cal,
+        quantity = 2,
+        price = 1421321414.0
+    )
+
+    val data = DataPortfolioDetail(
+        ticket = "ACES",
+        fullName = "Ace Hardware Indonesia Tbk",
+        allocate = 700,
+        profValue = 5.0,
+        profDrop = 0.72,
+        userName = "Nilai",
+        allocateValue = 25.32,
+        lotValue = 26,
+        averagePriceValue = 760.96,
+        invValue =  0.72,
+        historyTransaction = listOf(tetsHist,tetsHist,tetsHist,tetsHist,tetsHist,tetsHist,tetsHist)
+    )
+
     val stateDialog = remember {
         mutableStateOf(false)
     }
     if (stateDialog.value){
-        AddTransactionDialog(clickBack = {stateDialog.value = false}, stateDialog = stateDialog)
+        AddTransactionDialog(clickBack = {stateDialog.value = false}, stateDialog = stateDialog, nameTicket = selectedDetailName.value)
     }
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -80,23 +106,23 @@ fun PortfolioDetailPage(clickBack: () -> Unit, selectedDetailName: MutableState<
 
             Title(
                 modifier = Modifier.fillMaxWidth(),
-                name = "ACES",
-                fullName = "Ace Hardware Indonesia Tbk",
-                AlocateValue = 700,
-                ProfValue = 5.0,
-                ProfDrop = 0.72
+                name = data.ticket,
+                fullName = data.fullName,
+                AllocateValue = data.allocate,
+                ProfValue = data.profValue,
+                ProfDrop = data.profDrop
             )
             Detail(
                 modifier = Modifier,
-                UserName = "Nilai",
-                AlocateValue = 25.32,
-                LotValue = 26,
-                AveragePriceValue = 760.96,
-                InvValue = 1978496.0,
-                ProfValue = 158496.0,
-                ProfDrop = 0.72
+                UserName = data.userName,
+                AllocateValue = data.allocateValue,
+                LotValue = data.lotValue,
+                AveragePriceValue = data.averagePriceValue,
+                InvValue = data.invValue,
+                ProfValue = data.profValue,
+                ProfDrop = data.profDrop
             )
-            History()
+            History(data.historyTransaction)
         }
         Button(
             onClick = {
@@ -115,7 +141,7 @@ fun PortfolioDetailPage(clickBack: () -> Unit, selectedDetailName: MutableState<
 }
 
 @Composable
-fun Title(modifier: Modifier, name: String, fullName: String, AlocateValue: Int, ProfValue: Double, ProfDrop: Double) {
+fun Title(modifier: Modifier, name: String, fullName: String, AllocateValue: Int, ProfValue: Double, ProfDrop: Double) {
     Row(modifier = modifier,
         horizontalArrangement = Arrangement.Start)
     {
@@ -151,7 +177,7 @@ fun Title(modifier: Modifier, name: String, fullName: String, AlocateValue: Int,
             Text(
                 fontFamily = inter,
                 fontSize = 12.0.sp,
-                text = AlocateValue.toString()
+                text = AllocateValue.toString()
             )
             Text(
                 fontFamily = inter,
@@ -164,7 +190,7 @@ fun Title(modifier: Modifier, name: String, fullName: String, AlocateValue: Int,
 }
 
 @Composable
-fun Detail(modifier: Modifier, UserName: String, AlocateValue: Double, LotValue: Int, AveragePriceValue: Double, InvValue: Double, ProfValue: Double, ProfDrop: Double){
+fun Detail(modifier: Modifier, UserName: String, AllocateValue: Double, LotValue: Int, AveragePriceValue: Double, InvValue: Double, ProfValue: Double, ProfDrop: Double){
     Column(modifier = modifier
         .fillMaxWidth()
         .heightIn(min = 167.dp, max = 167.dp)
@@ -232,7 +258,7 @@ fun Detail(modifier: Modifier, UserName: String, AlocateValue: Double, LotValue:
                 Text(
                     fontFamily = inter,
                     fontSize = 12.0.sp,
-                    text = "$AlocateValue %"
+                    text = "$AllocateValue %"
                 )
                 Text(
                     fontFamily = inter,
@@ -261,7 +287,7 @@ fun Detail(modifier: Modifier, UserName: String, AlocateValue: Double, LotValue:
 }
 
 @Composable
-fun History() {
+fun History(historyTransaction: List<DataTransaction> ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -288,98 +314,15 @@ fun History() {
             .fillMaxWidth()
             .padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong()),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
+            historyTransaction.forEach { it ->
+                item {itemHistory(
+                    DateTransaction = it.dateTransaction.time,
+                    TypeTransaction = it.type,
+                    LocValueTransaction = it.quantity,
+                    InvValueTransaction = it.price
                 )
+                }
             }
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-            item {itemHistory(
-                DateTransaction = Date(1565209665.toLong() ),
-                TypeTransaction = "Buy",
-                LocValueTransaction = 2,
-                InvValueTransaction = 141000.0
-            )}
-
         }
     }
 }
@@ -398,12 +341,12 @@ fun itemHistory(DateTransaction: Date, TypeTransaction: String,  LocValueTransac
             Text(
                 fontFamily = inter,
                 fontSize = 12.0.sp,
-                text = LocValueTransaction.toString() + " Lot"
+                text = "$LocValueTransaction Lot"
             )
             Text(
                 fontFamily = inter,
                 fontSize = 12.0.sp,
-                text = InvValueTransaction.toString()  + " ₽"
+                text = "$InvValueTransaction ₽"
             )
 
         }

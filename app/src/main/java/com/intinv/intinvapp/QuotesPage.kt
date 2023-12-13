@@ -68,7 +68,8 @@ fun itemQuotes(curentTime: String, name: String, fullName: String, priceValue: D
     if(stateDialog.value){
         AddTransactionDialog(
             clickBack = { stateDialog.value = false },
-            stateDialog = stateDialog)
+            stateDialog = stateDialog,
+            nameTicket = name)
     }
     Column(modifier = Modifier
         .heightIn(min = 60.dp, max = 100.dp)

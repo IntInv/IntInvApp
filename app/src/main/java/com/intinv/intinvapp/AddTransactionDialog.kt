@@ -3,6 +3,7 @@ package com.intinv.intinvapp
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
+import android.service.autofill.DateTransformation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.intinv.intinvapp.data.DataTransaction
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.AppYellow
 import java.util.Calendar
@@ -49,7 +51,7 @@ import java.util.Locale
 fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDialog: MutableState<Boolean>){
     val listTypeTransaction = listOf("Buy","Sell","Dividend","Input", "Output")
     val selectedTypeIndex = remember { mutableIntStateOf(0) }
-    val nameTicketValue = remember{ mutableStateOf("")}
+    val nameTicketValue = remember{ mutableStateOf(nameTicket)}
     val quantityValue = remember{ mutableStateOf("")}
     val priceValue = remember{ mutableStateOf("")}
     val calendar = remember { Calendar.getInstance() }
@@ -172,7 +174,15 @@ fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDial
 
             }
             Button(
-                onClick = {},
+                onClick = {
+//                    DataTransaction(
+//                        type = listTypeTransaction[selectedTypeIndex.value],
+//                        name = nameTicketValue.value,
+//                        quantity = quantityValue.value.toInt(),
+//                        dateTransaction = calendar,
+//                        price = priceValue.value.toDouble()
+//                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(PaddingValues(vertical = 10.dp)),
@@ -184,6 +194,8 @@ fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDial
             }
         }
     })
+
+
 }
 
 @Composable
