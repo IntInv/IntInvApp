@@ -1,9 +1,10 @@
-package com.intinv.intinvapp
+package com.intinv.intinvapp.ui.theme
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import com.intinv.intinvapp.R
 
 val inter: FontFamily = FontFamily(
     Font(R.font.relay_inter_black, weight = FontWeight.W900, style = FontStyle.Normal),

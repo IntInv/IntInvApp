@@ -1,4 +1,4 @@
-package com.intinv.intinvapp
+package com.intinv.intinvapp.sections.portfolio
 
 
 import androidx.compose.foundation.Image
@@ -32,20 +32,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.intinv.intinvapp.data.DataPortfolioDetail
-import com.intinv.intinvapp.data.DataTransaction
+import com.intinv.intinvapp.sections.transaction.AddTransactionDialog
+import com.intinv.intinvapp.R
+import com.intinv.intinvapp.domain.DataPortfolioDetail
+import com.intinv.intinvapp.domain.DataTransaction
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.AppYellow
+import com.intinv.intinvapp.ui.theme.inter
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
 //@Preview(widthDp = 390, heightDp = 844)
 @Composable
-fun PortfolioDetailPage(clickBack: () -> Unit, selectedDetailName: MutableState<String>){
-
+fun PortfolioDetailPage(
+    clickBack: () -> Unit,
+    selectedDetailName: MutableState<String>
+) {
     val cal = Calendar.getInstance()
-    cal.setTime(Date(1565209665.toLong()));
+    cal.time = Date(1565209665L)
+
     val tetsHist = DataTransaction(
         type = "Buy",
         name = "ACES",
@@ -141,7 +147,14 @@ fun PortfolioDetailPage(clickBack: () -> Unit, selectedDetailName: MutableState<
 }
 
 @Composable
-fun Title(modifier: Modifier, name: String, fullName: String, AllocateValue: Int, ProfValue: Double, ProfDrop: Double) {
+fun Title(
+    modifier: Modifier,
+    name: String,
+    fullName: String,
+    AllocateValue: Int,
+    ProfValue: Double,
+    ProfDrop: Double
+) {
     Row(modifier = modifier,
         horizontalArrangement = Arrangement.Start)
     {
@@ -157,10 +170,10 @@ fun Title(modifier: Modifier, name: String, fullName: String, AllocateValue: Int
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(fontFamily=inter,
+            Text(fontFamily= inter,
                 fontSize = 14.0.sp,
                 text = name)
-            Text(fontFamily=inter,
+            Text(fontFamily= inter,
                 fontSize = 12.0.sp,
                 text = fullName,
                 color = Color.Gray
@@ -190,7 +203,16 @@ fun Title(modifier: Modifier, name: String, fullName: String, AllocateValue: Int
 }
 
 @Composable
-fun Detail(modifier: Modifier, UserName: String, AllocateValue: Double, LotValue: Int, AveragePriceValue: Double, InvValue: Double, ProfValue: Double, ProfDrop: Double){
+fun Detail(
+    modifier: Modifier,
+    UserName: String,
+    AllocateValue: Double,
+    LotValue: Int,
+    AveragePriceValue: Double,
+    InvValue: Double,
+    ProfValue: Double,
+    ProfDrop: Double
+){
     Column(modifier = modifier
         .fillMaxWidth()
         .heightIn(min = 167.dp, max = 167.dp)
@@ -315,7 +337,8 @@ fun History(historyTransaction: List<DataTransaction> ) {
             .padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
             historyTransaction.forEach { it ->
-                item {itemHistory(
+                item {
+                    itemHistory(
                     DateTransaction = it.dateTransaction.time,
                     TypeTransaction = it.type,
                     LocValueTransaction = it.quantity,
@@ -348,9 +371,7 @@ fun itemHistory(DateTransaction: Date, TypeTransaction: String,  LocValueTransac
                 fontSize = 12.0.sp,
                 text = "$InvValueTransaction ₽"
             )
-
         }
     }
-
 }
 

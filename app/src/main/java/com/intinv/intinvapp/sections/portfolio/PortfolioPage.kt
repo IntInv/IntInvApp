@@ -1,4 +1,4 @@
-package com.intinv.intinvapp
+package com.intinv.intinvapp.sections.portfolio
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.intinv.intinvapp.Logo
+import com.intinv.intinvapp.R
 import com.intinv.intinvapp.ui.theme.AppYellow
+import com.intinv.intinvapp.ui.theme.inter
 
 //@Preview(widthDp = 390, heightDp = 844)
 @Composable
@@ -61,10 +63,10 @@ fun Portfolio(fullValue: Double, fullProfLossValue: Double, captioValue: Double,
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround){
-        Text(fontFamily=inter,
+        Text(fontFamily= inter,
             fontSize = 16.0.sp,
             text = "Portfolio")
-        Text(fontFamily=inter,
+        Text(fontFamily= inter,
             fontSize = 24.0.sp,
             text = "$fullValue ₽")
         Row(modifier = Modifier
@@ -74,28 +76,28 @@ fun Portfolio(fullValue: Double, fullProfLossValue: Double, captioValue: Double,
             horizontalArrangement = Arrangement.SpaceBetween
             ){
             Column(){
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = "Profit/Loss")
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = "$fullProfLossValue ₽",
                     color = if (fullProfLossValue > 0) Color.Green else Color.Red)
             }
             Column(){
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = "Cation gain")
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = "$captioValue ₽",
                     color = if (captioValue > 0) Color.Green else Color.Red)
             }
             Column(){
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = "Open")
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = "$openValue  ₽")
             }
@@ -112,9 +114,9 @@ fun stockList (clickDetail: (name: String)->Unit){
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        item{itemList("GOTO", "GoTo Gojek Tokopedia Tbk", 1674678.0, -52742.0, 20.0, clickDetail)}
-        item{itemList("PTBA", "Bukit Asam Tbk", 237588.0, 2765.0, 20.0, clickDetail)}
-        item{itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0, clickDetail)}
+        item{ itemList("GOTO", "GoTo Gojek Tokopedia Tbk", 1674678.0, -52742.0, 20.0, clickDetail) }
+        item{ itemList("PTBA", "Bukit Asam Tbk", 237588.0, 2765.0, 20.0, clickDetail) }
+        item{ itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0, clickDetail) }
 //        item{itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0)}
 //        item{itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0)}
 //        item{itemList("ACES", "Ace Hardware Indonesia Tbk", 1454658.0, 12567.0, 20.0)}
@@ -141,10 +143,10 @@ fun itemList(name: String, fullName: String, InvValue: Double, ProfValue: Double
                 .heightIn(max = 45.dp)
                 .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center){
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 14.0.sp,
                     text = name)
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = fullName,
                     color = Color.Gray
@@ -157,13 +159,13 @@ fun itemList(name: String, fullName: String, InvValue: Double, ProfValue: Double
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween){
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = "Investment")
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = "Profit/Loss")
-                Text(fontFamily=inter,
+                Text(fontFamily= inter,
                     fontSize = 12.0.sp,
                     text = "Allocate")
             }
@@ -172,14 +174,14 @@ fun itemList(name: String, fullName: String, InvValue: Double, ProfValue: Double
             .fillMaxWidth()
             .padding(2.dp),
             horizontalArrangement = Arrangement.SpaceBetween){
-            Text(fontFamily=inter,
+            Text(fontFamily= inter,
                 fontSize = 12.0.sp,
                 text = "$InvValue ₽")
-            Text(fontFamily=inter,
+            Text(fontFamily= inter,
                 fontSize = 12.0.sp,
                 text = "$ProfValue ₽",
                 color = if (ProfValue > 0) Color.Green else Color.Red)
-            Text(fontFamily=inter,
+            Text(fontFamily= inter,
                 fontSize = 12.0.sp,
                 text =  "$AlocateValue Lot")
         }

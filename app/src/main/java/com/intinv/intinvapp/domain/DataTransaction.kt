@@ -1,4 +1,4 @@
-package com.intinv.intinvapp.data
+package com.intinv.intinvapp.domain
 
 import java.util.Calendar
 

@@ -1,9 +1,8 @@
-package com.intinv.intinvapp
+package com.intinv.intinvapp.sections.transaction
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
-import android.service.autofill.DateTransformation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,9 +39,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.intinv.intinvapp.data.DataTransaction
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.AppYellow
+import com.intinv.intinvapp.ui.theme.inter
 import java.util.Calendar
 import java.util.Locale
 
@@ -96,7 +95,7 @@ fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDial
                     modifier = Modifier.wrapContentWidth()) {
                     Text(text = text,
                         color = Color.Black,
-                        fontFamily=inter,
+                        fontFamily= inter,
                         fontSize = 13.0.sp)
                 }}
             }
@@ -107,7 +106,7 @@ fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDial
                 horizontalAlignment = Alignment.Start) {
 
                 Text(text = "Name/Ticket",
-                    fontFamily=inter,
+                    fontFamily= inter,
                     fontSize = 14.sp)
 
                 TextField(
@@ -124,7 +123,7 @@ fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDial
                 )
 
                 Text(text = "Quantity",
-                    fontFamily=inter,
+                    fontFamily= inter,
                     fontSize = 14.0.sp,
                     modifier =  Modifier.padding(top = 10.dp))
 
@@ -146,14 +145,14 @@ fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDial
                 )
 
                 Text(text = "Date Time",
-                    fontFamily=inter,
+                    fontFamily= inter,
                     fontSize = 14.0.sp,
                     modifier =  Modifier.padding(top = 10.dp))
 
                 DateTimePicker(calendar)
 
                 Text(text = "Price",
-                    fontFamily=inter,
+                    fontFamily= inter,
                     fontSize = 14.0.sp,
                     modifier =  Modifier.padding(top = 10.dp))
 
@@ -247,7 +246,7 @@ fun DateTimePicker(calendar: Calendar) {
     // Display the date and time as text and when clicked, show the DatePickerDialog
     Text(
         text = currentDateString.value,
-        fontFamily=inter,
+        fontFamily= inter,
         fontSize = 14.0.sp,
         modifier = Modifier.clickable{ setShowDatePicker(true) }
             .fillMaxWidth()
