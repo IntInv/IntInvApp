@@ -1,5 +1,6 @@
 package com.intinv.intinvapp.domain
 
+
 data class DataPortfolio (
     val fullValue: Double,
     val fullProfLossValue: Double,

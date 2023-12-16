@@ -21,7 +21,7 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "API_URL", "\"10.0.2.2:8080\"") // REST service url
+        buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"") // REST service url
     }
 
     buildTypes {
