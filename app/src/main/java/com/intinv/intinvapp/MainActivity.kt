@@ -15,9 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.intinv.intinvapp.ui.theme.IntInvAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 const val LOG_TAG = "MainActivityLog"
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    MainScreen(this)
                 }
             }
         }
@@ -38,7 +40,9 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    activity: MainActivity
+) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -49,7 +53,10 @@ fun MainScreen() {
         Box(
             modifier = Modifier.padding(bottom = it.calculateBottomPadding())
         ) {
-            navigationMain(navHostController = navController)
+            NavigationMain(
+                navHostController = navController,
+                activity = activity
+            )
         }
     }
 }

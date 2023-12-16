@@ -1,5 +1,6 @@
 package com.intinv.intinvapp
 
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -25,43 +26,49 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.intinv.intinvapp.sections.quotes.QuotesPage
 import com.intinv.intinvapp.sections.portfolio.PortfolioDetailPage
 import com.intinv.intinvapp.sections.portfolio.PortfolioPage
+import com.intinv.intinvapp.sections.portfolio.viewModel.PortfolioViewModel
 import com.intinv.intinvapp.sections.transaction.AddTransactionDialog
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.inter
 
 @Composable
-fun navigationMain(navHostController: NavHostController) {
-    val selectedDetailName = remember {
-        mutableStateOf("")
-    }
-
+fun NavigationMain(
+    navHostController: NavHostController,
+    activity: MainActivity
+) {
     NavHost(
         navController = navHostController,
         startDestination = NavigationItem.Quotes.screen
     ) {
-        composable(NavigationItem.Quotes.screen) {
-            QuotesPage()
-        }
-        composable(NavigationItem.Portfolio.screen) {
-            PortfolioPage(
-                clickDetail = {
-                    navHostController.navigate("PortfolioDetailScreen")
-                    selectedDetailName.value = it
-                }
+        composable(Screen.Quotes.label) {
+            // TODO - take viewModel and pass it
+            QuotesPage(
+                navHostController
             )
         }
-        composable("PortfolioDetailScreen") {
+        composable(NavigationItem.Portfolio.screen) {
+            val portfolioViewModel by activity.viewModels<PortfolioViewModel>()
+            PortfolioPage(
+                navHostController,
+                portfolioViewModel
+            )
+        }
+        composable(
+            route = "${Screen.PortfolioDetail.label}/{detailName}",
+            arguments = listOf(navArgument("detailName") { type = NavType.StringType })
+        ) { backStackEntry ->
+            // TODO - take viewModel and pass it
             PortfolioDetailPage(
-                clickBack = {
-                    navHostController.navigate("PortfolioScreen")
-                },
-                selectedDetailName
+                navHostController,
+                backStackEntry.arguments?.getString("detailName")
             )
         }
     }
@@ -78,6 +85,7 @@ fun menuBar(navController: NavController) {
     val stateDialog = remember {
         mutableStateOf(false)
     }
+
     if (stateDialog.value) {
         AddTransactionDialog(
             clickBack = {
@@ -134,12 +142,18 @@ fun Logo() {
 }
 
 sealed class NavigationItem(
-    var title: String,
-    var icon: ImageVector,
+    val title: String,
+    val icon: ImageVector,
     val screen: String
 ) {
-    object Portfolio : NavigationItem("Portfolio", Icons.Filled.AccountCircle, "PortfolioScreen")
+    object Portfolio : NavigationItem("Portfolio", Icons.Filled.AccountCircle, Screen.Portfolio.label)
     object Transaction : NavigationItem("AddTransaction", Icons.Filled.Add, "AddTransactionScreen")
-    object Quotes : NavigationItem("Quotes", Icons.Filled.List, "QuotesScreen")
+    object Quotes : NavigationItem("Quotes", Icons.Filled.List, Screen.Quotes.label)
+}
+
+sealed class Screen(val label: String) {
+    object Portfolio : Screen("Portfolio")
+    object PortfolioDetail : Screen("PortfolioDetail")
+    object Quotes : Screen("Qoutes")
 }
 

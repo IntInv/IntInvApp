@@ -1,6 +1,7 @@
 package com.intinv.intinvapp.di
 
 import com.intinv.intinvapp.BuildConfig
+import com.intinv.intinvapp.sections.portfolio.network.PortfolioService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,9 +38,9 @@ object NetworkModule {
             .build()
     }
 
-    /*@Provides
+    @Provides
     @Singleton
-    fun provideServiceTemplate(retrofit: Retrofit): ServiceInterface {
-        return retrofit.create(ServiceInterface::class.java)
-    }*/
+    fun providePortfolioService(retrofit: Retrofit): PortfolioService {
+        return retrofit.create(PortfolioService::class.java)
+    }
 }

@@ -23,14 +23,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.intinv.intinvapp.sections.transaction.AddTransactionDialog
 import com.intinv.intinvapp.Logo
 import com.intinv.intinvapp.R
 import com.intinv.intinvapp.ui.theme.inter
 
-//@Preview(widthDp = 390, heightDp = 844)
 @Composable
-fun QuotesPage(){
+fun QuotesPage(
+    navController: NavHostController,
+    // viewModel: QuotesViewModel TODO - implement
+) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color.White),
@@ -44,23 +47,29 @@ fun QuotesPage(){
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            item{ itemQuotes("17:13:00","GOTO", "GoTo Gojek Tokopedia Tbk", 16778.0, -25.0,) }
-            item{ itemQuotes("17:13:00","PTBA", "Bukit Asam Tbk", 2358.0, 15.2) }
-            item{ itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
-            item{ itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
-            item{ itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
-            item{ itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
-            item{ itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
-            item{ itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
-            item{ itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
-            item{ itemQuotes("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
-
+            // TODO - screenState.QuotesData.foreach
+            item{ QuoteItem("17:13:00","GOTO", "GoTo Gojek Tokopedia Tbk", 16778.0, -25.0,) }
+            item{ QuoteItem("17:13:00","PTBA", "Bukit Asam Tbk", 2358.0, 15.2) }
+            item{ QuoteItem("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
+            item{ QuoteItem("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
+            item{ QuoteItem("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
+            item{ QuoteItem("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
+            item{ QuoteItem("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
+            item{ QuoteItem("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
+            item{ QuoteItem("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
+            item{ QuoteItem("17:13:00","ACES", "Ace Hardware Indonesia Tbk", 14954.0, 73.7) }
         }
     }
 }
 
 @Composable
-fun itemQuotes(curentTime: String, name: String, fullName: String, priceValue: Double, changeValue: Double){
+fun QuoteItem(
+    curentTime: String,
+    name: String,
+    fullName: String,
+    priceValue: Double,
+    changeValue: Double
+) {
     val stateDialog = remember {
         mutableStateOf(false)
     }
@@ -75,7 +84,7 @@ fun itemQuotes(curentTime: String, name: String, fullName: String, priceValue: D
         .padding(5.dp)
         .clickable(onClick = {stateDialog.value = true})
         ){
-        Row(){
+        Row {
             Image(painter = painterResource(id = R.drawable.home_icon1),  contentDescription = "Icon",
                 modifier = Modifier.size(45.dp))
             Column(modifier = Modifier

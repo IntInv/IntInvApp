@@ -1,6 +1,5 @@
 package com.intinv.intinvapp.sections.portfolio
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,7 +22,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.intinv.intinvapp.sections.transaction.AddTransactionDialog
 import com.intinv.intinvapp.R
 import com.intinv.intinvapp.domain.DataPortfolioDetail
@@ -43,14 +42,16 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
-//@Preview(widthDp = 390, heightDp = 844)
 @Composable
 fun PortfolioDetailPage(
-    clickBack: () -> Unit,
-    selectedDetailName: MutableState<String>
+    navController: NavHostController,
+    selectedDetailName: String? = null,
+    // viewModel: PortfolioDetailViewModel TODO - implement
 ) {
     val cal = Calendar.getInstance()
     cal.time = Date(1565209665L)
+
+    // val screenState = viewModel.screenState.collectAsState().value TODO - implement
 
     val tetsHist = DataTransaction(
         type = "Buy",
@@ -70,28 +71,48 @@ fun PortfolioDetailPage(
         allocateValue = 25.32,
         lotValue = 26,
         averagePriceValue = 760.96,
-        invValue =  0.72,
-        historyTransaction = listOf(tetsHist,tetsHist,tetsHist,tetsHist,tetsHist,tetsHist,tetsHist)
+        invValue = 0.72,
+        historyTransaction = listOf(
+            tetsHist,
+            tetsHist,
+            tetsHist,
+            tetsHist,
+            tetsHist,
+            tetsHist,
+            tetsHist
+        )
     )
 
     val stateDialog = remember {
         mutableStateOf(false)
     }
-    if (stateDialog.value){
-        AddTransactionDialog(clickBack = {stateDialog.value = false}, stateDialog = stateDialog, nameTicket = selectedDetailName.value)
+    if (stateDialog.value && selectedDetailName != null) {
+        AddTransactionDialog(
+            clickBack = {
+                stateDialog.value = false
+            },
+            stateDialog = stateDialog,
+            nameTicket = selectedDetailName
+        )
+    } else {
+        // TODO - error dialog
     }
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(0.95f)
-        .background(Color.White)
-        .padding(20.dp),
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.95f)
+            .background(Color.White)
+            .padding(20.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.93F),
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.93F),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start) {
+            horizontalAlignment = Alignment.Start
+        ) {
             Row(
                 modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically
@@ -100,7 +121,11 @@ fun PortfolioDetailPage(
                     Icon(
                         Icons.Filled.ArrowBack,
                         contentDescription = "",
-                        modifier = Modifier.padding(2.dp).clickable { clickBack() }
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .clickable {
+                                navController.popBackStack()
+                            }
                     )
                 }
                 Text(
@@ -114,19 +139,19 @@ fun PortfolioDetailPage(
                 modifier = Modifier.fillMaxWidth(),
                 name = data.ticket,
                 fullName = data.fullName,
-                AllocateValue = data.allocate,
-                ProfValue = data.profValue,
-                ProfDrop = data.profDrop
+                allocateValue = data.allocate,
+                profValue = data.profValue,
+                profDrop = data.profDrop
             )
             Detail(
                 modifier = Modifier,
-                UserName = data.userName,
-                AllocateValue = data.allocateValue,
-                LotValue = data.lotValue,
-                AveragePriceValue = data.averagePriceValue,
-                InvValue = data.invValue,
-                ProfValue = data.profValue,
-                ProfDrop = data.profDrop
+                userName = data.userName,
+                allocateValue = data.allocateValue,
+                lotValue = data.lotValue,
+                averagePriceValue = data.averagePriceValue,
+                invValue = data.invValue,
+                profValue = data.profValue,
+                profDrop = data.profDrop
             )
             History(data.historyTransaction)
         }
@@ -137,7 +162,8 @@ fun PortfolioDetailPage(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(PaddingValues(top = 5.dp)),
-            colors = ButtonDefaults.buttonColors(backgroundColor = AppYellow
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = AppYellow
             )
 
         ) {
@@ -151,15 +177,17 @@ fun Title(
     modifier: Modifier,
     name: String,
     fullName: String,
-    AllocateValue: Int,
-    ProfValue: Double,
-    ProfDrop: Double
+    allocateValue: Int,
+    profValue: Double,
+    profDrop: Double
 ) {
-    Row(modifier = modifier,
-        horizontalArrangement = Arrangement.Start)
-    {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Start
+    ) {
         Image(
-            painter = painterResource(id = R.drawable.home_icon1), contentDescription = "Icon",
+            painter = painterResource(id = R.drawable.home_icon1),
+            contentDescription = "Icon",
             modifier = Modifier
                 .size(45.dp)
                 .padding(5.dp)
@@ -170,10 +198,13 @@ fun Title(
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(fontFamily= inter,
+            Text(
+                fontFamily = inter,
                 fontSize = 14.0.sp,
-                text = name)
-            Text(fontFamily= inter,
+                text = name
+            )
+            Text(
+                fontFamily = inter,
                 fontSize = 12.0.sp,
                 text = fullName,
                 color = Color.Gray
@@ -190,13 +221,13 @@ fun Title(
             Text(
                 fontFamily = inter,
                 fontSize = 12.0.sp,
-                text = AllocateValue.toString()
+                text = allocateValue.toString()
             )
             Text(
                 fontFamily = inter,
                 fontSize = 12.0.sp,
-                text = ProfValue.toString() + " (" + ProfDrop.toString()  + " %" +")",
-                color = if (ProfValue > 0) Color.Green else Color.Red
+                text = profValue.toString() + " (" + profDrop.toString() + " %" + ")",
+                color = if (profValue > 0) Color.Green else Color.Red
             )
         }
     }
@@ -205,33 +236,36 @@ fun Title(
 @Composable
 fun Detail(
     modifier: Modifier,
-    UserName: String,
-    AllocateValue: Double,
-    LotValue: Int,
-    AveragePriceValue: Double,
-    InvValue: Double,
-    ProfValue: Double,
-    ProfDrop: Double
-){
-    Column(modifier = modifier
-        .fillMaxWidth()
-        .heightIn(min = 167.dp, max = 167.dp)
-        .padding(
-            PaddingValues(
-                start = 0.0.dp,
-                top = 10.0.dp,
-                end = 0.0.dp,
-                bottom = 0.0.dp
+    userName: String,
+    allocateValue: Double,
+    lotValue: Int,
+    averagePriceValue: Double,
+    invValue: Double,
+    profValue: Double,
+    profDrop: Double
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = 167.dp, max = 167.dp)
+            .padding(
+                PaddingValues(
+                    start = 0.0.dp,
+                    top = 10.0.dp,
+                    end = 0.0.dp,
+                    bottom = 0.0.dp
+                )
             )
-        )
-        .background(
-            AppGray,
-            shape = RoundedCornerShape(20.dp)
-        )) {
-        Text(modifier = Modifier.padding(PaddingValues(start = 10.dp)),
+            .background(
+                AppGray,
+                shape = RoundedCornerShape(20.dp)
+            )
+    ) {
+        Text(
+            modifier = Modifier.padding(PaddingValues(start = 10.dp)),
             fontFamily = inter,
             fontSize = 16.0.sp,
-            text = UserName
+            text = userName
         )
         Row()
         {
@@ -280,28 +314,28 @@ fun Detail(
                 Text(
                     fontFamily = inter,
                     fontSize = 12.0.sp,
-                    text = "$AllocateValue %"
+                    text = "$allocateValue %"
                 )
                 Text(
                     fontFamily = inter,
                     fontSize = 12.0.sp,
-                    text = LotValue.toString()
+                    text = lotValue.toString()
                 )
                 Text(
                     fontFamily = inter,
                     fontSize = 12.0.sp,
-                    text = AveragePriceValue.toString()
+                    text = averagePriceValue.toString()
                 )
                 Text(
                     fontFamily = inter,
                     fontSize = 12.0.sp,
-                    text = InvValue.toString() + " ₽"
+                    text = invValue.toString() + " ₽"
                 )
                 Text(
                     fontFamily = inter,
                     fontSize = 12.0.sp,
-                    text = ProfValue.toString()  + " ₽" + " (" + ProfDrop.toString() + " %" + ")",
-                    color = if (ProfValue > 0) Color.Green else Color.Red
+                    text = profValue.toString() + " ₽" + " (" + profDrop.toString() + " %" + ")",
+                    color = if (profValue > 0) Color.Green else Color.Red
                 )
             }
         }
@@ -309,7 +343,7 @@ fun Detail(
 }
 
 @Composable
-fun History(historyTransaction: List<DataTransaction> ) {
+fun History(historyTransaction: List<DataTransaction>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -332,18 +366,20 @@ fun History(historyTransaction: List<DataTransaction> ) {
             fontSize = 16.0.sp,
             text = "Transaction History"
         )
-        LazyColumn(modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            historyTransaction.forEach { it ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            historyTransaction.forEach {
                 item {
                     itemHistory(
-                    DateTransaction = it.dateTransaction.time,
-                    TypeTransaction = it.type,
-                    LocValueTransaction = it.quantity,
-                    InvValueTransaction = it.price
-                )
+                        dateTransaction = it.dateTransaction.time,
+                        typeTransaction = it.type,
+                        locValueTransaction = it.quantity,
+                        invValueTransaction = it.price
+                    )
                 }
             }
         }
@@ -351,25 +387,32 @@ fun History(historyTransaction: List<DataTransaction> ) {
 }
 
 @Composable
-fun itemHistory(DateTransaction: Date, TypeTransaction: String,  LocValueTransaction: Int,   InvValueTransaction: Double){
+fun itemHistory(
+    dateTransaction: Date,
+    typeTransaction: String,
+    locValueTransaction: Int,
+    invValueTransaction: Double
+) {
     Column {
-        Text(text = SimpleDateFormat("dd MMMM yyyy").format(DateTransaction).toString())
-        Row(modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween){
+        Text(text = SimpleDateFormat("dd MMMM yyyy").format(dateTransaction).toString())
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
                 fontFamily = inter,
                 fontSize = 12.0.sp,
-                text = TypeTransaction.toString()
+                text = typeTransaction.toString()
             )
             Text(
                 fontFamily = inter,
                 fontSize = 12.0.sp,
-                text = "$LocValueTransaction Lot"
+                text = "$locValueTransaction Lot"
             )
             Text(
                 fontFamily = inter,
                 fontSize = 12.0.sp,
-                text = "$InvValueTransaction ₽"
+                text = "$invValueTransaction ₽"
             )
         }
     }

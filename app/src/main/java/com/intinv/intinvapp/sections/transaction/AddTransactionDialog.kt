@@ -45,135 +45,174 @@ import com.intinv.intinvapp.ui.theme.inter
 import java.util.Calendar
 import java.util.Locale
 
-
 @Composable
-fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDialog: MutableState<Boolean>){
-    val listTypeTransaction = listOf("Buy","Sell","Dividend","Input", "Output")
+fun AddTransactionDialog(
+    clickBack: () -> Unit,
+    nameTicket: String = "",
+    stateDialog: MutableState<Boolean>
+) {
+    val listTypeTransaction = listOf(
+        "Buy",
+        "Sell",
+        "Dividend",
+        "Input",
+        "Output"
+    )
+
     val selectedTypeIndex = remember { mutableIntStateOf(0) }
-    val nameTicketValue = remember{ mutableStateOf(nameTicket)}
-    val quantityValue = remember{ mutableStateOf("")}
-    val priceValue = remember{ mutableStateOf("")}
+    val nameTicketValue = remember { mutableStateOf(nameTicket) }
+    val quantityValue = remember { mutableStateOf("") }
+    val priceValue = remember { mutableStateOf("") }
     val calendar = remember { Calendar.getInstance() }
-    AlertDialog(modifier = Modifier.fillMaxWidth(),
+
+    AlertDialog(
+        modifier = Modifier.fillMaxWidth(),
         onDismissRequest = { /*TODO*/ },
         buttons = { /*TODO*/ },
         title = {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(
-                modifier = Modifier,
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = { stateDialog.value = false }) {
-                    Icon(
-                        Icons.Filled.ArrowBack,
-                        contentDescription = "",
-                        modifier = Modifier.padding(2.dp)
-                            .clickable { clickBack() }
+                Row(
+                    modifier = Modifier,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = { stateDialog.value = false }
+                    ) {
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .clickable { clickBack() }
+                        )
+                    }
+                    Text(
+                        fontFamily = inter,
+                        fontSize = 16.0.sp,
+                        text = "Add Transaction"
                     )
                 }
-                Text(
-                    fontFamily = inter,
-                    fontSize = 16.0.sp,
-                    text = "Add Transaction"
-                )
-            }
-            TabRow(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp),
-                selectedTabIndex = selectedTypeIndex.intValue,
-                backgroundColor = Color.Transparent,
-                contentColor = Color.Black ) {
-                listTypeTransaction.forEachIndexed{index, text ->
-                Tab(selected = selectedTypeIndex.intValue == index,
-                    onClick = { selectedTypeIndex.intValue = index },
-                    selectedContentColor = AppYellow,
-                    unselectedContentColor = AppGray,
-                    modifier = Modifier.wrapContentWidth()) {
-                    Text(text = text,
-                        color = Color.Black,
-                        fontFamily= inter,
-                        fontSize = 13.0.sp)
-                }}
-            }
-
-            Column(modifier = Modifier
-                .fillMaxWidth(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start) {
-
-                Text(text = "Name/Ticket",
-                    fontFamily= inter,
-                    fontSize = 14.sp)
-
-                TextField(
+                TabRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .wrapContentHeight(),
-                    value = nameTicketValue.value,
-                    singleLine = true,
-                    onValueChange = {nameTicketValue.value = it},
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor=Color.Black,
-                        backgroundColor = AppGray,),
-                    textStyle = TextStyle.Default.copy(fontSize = 14.sp),
-                )
+                        .padding(vertical = 10.dp),
+                    selectedTabIndex = selectedTypeIndex.intValue,
+                    backgroundColor = Color.Transparent,
+                    contentColor = Color.Black
+                ) {
+                    listTypeTransaction.forEachIndexed { index, text ->
+                        Tab(
+                            selected = selectedTypeIndex.intValue == index,
+                            onClick = { selectedTypeIndex.intValue = index },
+                            selectedContentColor = AppYellow,
+                            unselectedContentColor = AppGray,
+                            modifier = Modifier.wrapContentWidth()
+                        ) {
+                            Text(
+                                text = text,
+                                color = Color.Black,
+                                fontFamily = inter,
+                                fontSize = 13.0.sp
+                            )
+                        }
+                    }
+                }
 
-                Text(text = "Quantity",
-                    fontFamily= inter,
-                    fontSize = 14.0.sp,
-                    modifier =  Modifier.padding(top = 10.dp))
-
-                TextField(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    value = quantityValue.value,
-                    singleLine = true,
-                    onValueChange = {
-                        quantityValue.value = it
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor=Color.Black,
-                        backgroundColor = AppGray,),
-                    textStyle = TextStyle.Default.copy(fontSize = 14.sp),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number)
-                )
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.Start
+                ) {
 
-                Text(text = "Date Time",
-                    fontFamily= inter,
-                    fontSize = 14.0.sp,
-                    modifier =  Modifier.padding(top = 10.dp))
+                    Text(
+                        text = "Name/Ticket",
+                        fontFamily = inter,
+                        fontSize = 14.sp
+                    )
 
-                DateTimePicker(calendar)
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        value = nameTicketValue.value,
+                        singleLine = true,
+                        onValueChange = { nameTicketValue.value = it },
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = Color.Black,
+                            backgroundColor = AppGray,
+                        ),
+                        textStyle = TextStyle.Default.copy(fontSize = 14.sp),
+                    )
 
-                Text(text = "Price",
-                    fontFamily= inter,
-                    fontSize = 14.0.sp,
-                    modifier =  Modifier.padding(top = 10.dp))
+                    Text(
+                        text = "Quantity",
+                        fontFamily = inter,
+                        fontSize = 14.0.sp,
+                        modifier = Modifier.padding(top = 10.dp)
+                    )
 
-                TextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    value = priceValue.value,
-                    singleLine = true,
-                    onValueChange = {priceValue.value = it},
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor=Color.Black,
-                        backgroundColor = AppGray,),
-                    textStyle = TextStyle.Default.copy(fontSize = 14.sp),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number)
-                )
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        value = quantityValue.value,
+                        singleLine = true,
+                        onValueChange = {
+                            quantityValue.value = it
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = Color.Black,
+                            backgroundColor = AppGray,
+                        ),
+                        textStyle = TextStyle.Default.copy(fontSize = 14.sp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number
+                        )
+                    )
 
-            }
-            Button(
-                onClick = {
+                    Text(
+                        text = "Date Time",
+                        fontFamily = inter,
+                        fontSize = 14.0.sp,
+                        modifier = Modifier.padding(top = 10.dp)
+                    )
+
+                    DateTimePicker(calendar)
+
+                    Text(
+                        text = "Price",
+                        fontFamily = inter,
+                        fontSize = 14.0.sp,
+                        modifier = Modifier.padding(top = 10.dp)
+                    )
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        value = priceValue.value,
+                        singleLine = true,
+                        onValueChange = { priceValue.value = it },
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = Color.Black,
+                            backgroundColor = AppGray,
+                        ),
+                        textStyle = TextStyle.Default.copy(fontSize = 14.sp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number
+                        )
+                    )
+
+                }
+                Button(
+                    onClick = {
+                        // TODO - call viewModel handle intent method
 //                    DataTransaction(
 //                        type = listTypeTransaction[selectedTypeIndex.value],
 //                        name = nameTicketValue.value,
@@ -181,20 +220,20 @@ fun AddTransactionDialog(clickBack: ()->Unit, nameTicket: String = "", stateDial
 //                        dateTransaction = calendar,
 //                        price = priceValue.value.toDouble()
 //                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(PaddingValues(vertical = 10.dp)),
-                colors = ButtonDefaults.buttonColors(backgroundColor = AppYellow
-                )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(PaddingValues(vertical = 10.dp)),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = AppYellow
+                    )
 
-            ) {
-                Text("ADD", fontSize = 18.sp)
+                ) {
+                    Text("ADD", fontSize = 18.sp)
+                }
             }
         }
-    })
-
-
+    )
 }
 
 @Composable
@@ -246,9 +285,10 @@ fun DateTimePicker(calendar: Calendar) {
     // Display the date and time as text and when clicked, show the DatePickerDialog
     Text(
         text = currentDateString.value,
-        fontFamily= inter,
+        fontFamily = inter,
         fontSize = 14.0.sp,
-        modifier = Modifier.clickable{ setShowDatePicker(true) }
+        modifier = Modifier
+            .clickable { setShowDatePicker(true) }
             .fillMaxWidth()
             .background(AppGray)
             .padding(vertical = 5.dp)
