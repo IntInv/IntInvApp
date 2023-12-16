@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.intinv.intinvapp.sections.transaction.AddTransactionDialog
 import com.intinv.intinvapp.R
-import com.intinv.intinvapp.domain.DataPortfolioDetail
-import com.intinv.intinvapp.domain.DataTransaction
+import com.intinv.intinvapp.domain.PortfolioDetail
+import com.intinv.intinvapp.domain.Transaction
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.AppYellow
 import com.intinv.intinvapp.ui.theme.inter
@@ -53,7 +53,7 @@ fun PortfolioDetailPage(
 
     // val screenState = viewModel.screenState.collectAsState().value TODO - implement
 
-    val tetsHist = DataTransaction(
+    val tetsHist = Transaction(
         type = "Buy",
         name = "ACES",
         dateTransaction = cal,
@@ -61,7 +61,7 @@ fun PortfolioDetailPage(
         price = 1421321414.0
     )
 
-    val data = DataPortfolioDetail(
+    val data = PortfolioDetail(
         ticket = "ACES",
         fullName = "Ace Hardware Indonesia Tbk",
         allocate = 700,
@@ -343,7 +343,7 @@ fun Detail(
 }
 
 @Composable
-fun History(historyTransaction: List<DataTransaction>) {
+fun History(historyTransaction: List<Transaction>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

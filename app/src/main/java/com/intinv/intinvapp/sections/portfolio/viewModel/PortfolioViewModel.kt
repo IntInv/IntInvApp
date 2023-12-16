@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.intinv.intinvapp.constants.DEFAULT_NETWORK_ERROR_TEXT
 import com.intinv.intinvapp.constants.DEFAULT_NETWORK_LOADING_TEXT
-import com.intinv.intinvapp.domain.DataPortfolio
+import com.intinv.intinvapp.domain.Portfolio
 import com.intinv.intinvapp.domain.Status
 import com.intinv.intinvapp.sections.portfolio.domain.LoadPortfolio
 import com.intinv.intinvapp.sections.portfolio.domain.PortfolioScreenIntent
@@ -25,7 +25,7 @@ class PortfolioViewModel @Inject constructor(
     val screenState: StateFlow<PortfolioScreenState> = _screenState
 
     init {
-        //loadPortfolioDataFromNet() TODO - uncomment
+        loadPortfolioDataFromNet()
     }
 
     fun handleIntent(intent: PortfolioScreenIntent) {
@@ -42,7 +42,7 @@ class PortfolioViewModel @Inject constructor(
                 val resultMessage = if (it.data is String) it.data else null
                 when (it.status) {
                     Status.SUCCESS -> {
-                        if (it.data is DataPortfolio) {
+                        if (it.data is Portfolio) {
                             _screenState.value = _screenState.value.copy(
                                 isLoading = false,
                                 isError = false,

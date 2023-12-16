@@ -1,9 +1,13 @@
 package com.intinv.intinvapp.sections.portfolio
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,8 +18,13 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -25,41 +34,71 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.intinv.intinvapp.LOG_TAG
 import com.intinv.intinvapp.Logo
 import com.intinv.intinvapp.R
 import com.intinv.intinvapp.Screen
+import com.intinv.intinvapp.sections.portfolio.domain.LoadPortfolio
 import com.intinv.intinvapp.sections.portfolio.viewModel.PortfolioViewModel
 import com.intinv.intinvapp.ui.theme.AppYellow
 import com.intinv.intinvapp.ui.theme.inter
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PortfolioPage(
     navController: NavHostController,
     viewModel: PortfolioViewModel
 ) {
-    // TODO - add pull to refresh
+    val screenState = viewModel.screenState.collectAsState().value
+    Log.d(LOG_TAG, "screenState = $screenState")
 
-    Column(
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = screenState.isLoading,
+        onRefresh = {
+            viewModel.handleIntent(LoadPortfolio)
+        }
+    )
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .pullRefresh(pullRefreshState)
     ) {
-        val screenState = viewModel.screenState.collectAsState().value
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val clickDetail: (String) -> Unit = {
+                navController.navigate("${Screen.PortfolioDetail.label}/$it")
+            }
 
-        val clickDetail: (String) -> Unit = {
-            navController.navigate("${Screen.PortfolioDetail.label}/$it")
+            LazyColumn(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    Logo()
+                }
+                item {
+                    Portfolio( // TODO - use data from screenState.portfolioData
+                        fullValue = 3366924.0,
+                        fullProfLossValue = -37410.0,
+                        captioValue = -2.3,
+                        openValue = 23231.0
+                    )
+                }
+            }
+            PortfolioStockList(clickDetail)
         }
 
-        Logo()
-        Portfolio( // TODO - use data from screenState.portfolioData
-            fullValue = 3366924.0,
-            fullProfLossValue = -37410.0,
-            captioValue = -2.3,
-            openValue = 23231.0
+        PullRefreshIndicator(
+            refreshing = screenState.isLoading,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
         )
-        PortfolioStockList(clickDetail)
     }
 }
 

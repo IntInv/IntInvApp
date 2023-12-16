@@ -1,11 +1,9 @@
 package com.intinv.intinvapp.domain
 
-import java.util.Calendar
-
-data class DataTicket (
+data class Ticket (
     val name: String,
-    val fullNamr: String,
-    val time: Calendar,
+    val fullName: String,
+    val time: Long,
     val price: Double,
     val changeDay: Double
 )

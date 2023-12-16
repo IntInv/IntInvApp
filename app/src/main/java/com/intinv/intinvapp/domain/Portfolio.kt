@@ -1,10 +1,10 @@
 package com.intinv.intinvapp.domain
 
 
-data class DataPortfolio (
+data class Portfolio(
     val fullValue: Double,
     val fullProfLossValue: Double,
     val captioValue: Double,
     val openValue: Double,
-    val listTicket: List<DataTicket>
+    val listTicket: List<Ticket>
 )

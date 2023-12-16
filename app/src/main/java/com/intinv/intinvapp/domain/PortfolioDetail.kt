@@ -1,6 +1,6 @@
 package com.intinv.intinvapp.domain
 
-data class DataPortfolioDetail(
+data class PortfolioDetail(
     val ticket: String,
     val fullName: String,
     val allocate: Int,
@@ -11,5 +11,5 @@ data class DataPortfolioDetail(
     val lotValue: Int,
     val averagePriceValue: Double,
     val invValue: Double,
-    val historyTransaction: List<DataTransaction>
+    val historyTransaction: List<Transaction>
 )
