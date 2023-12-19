@@ -3,6 +3,7 @@ package com.intinv.intinvapp.sections.transaction
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,14 +40,23 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.intinv.intinvapp.LOG_TAG
+import com.intinv.intinvapp.domain.Transaction
+import com.intinv.intinvapp.sections.transaction.domain.AddTransactionScreenState
+import com.intinv.intinvapp.sections.transaction.network.AddTransactionService
+import com.intinv.intinvapp.sections.transaction.viewModel.AddTransactionViewModel
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.AppYellow
 import com.intinv.intinvapp.ui.theme.inter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 
 @Composable
 fun AddTransactionDialog(
+    viewModel: AddTransactionViewModel,
     clickBack: () -> Unit,
     nameTicket: String = "",
     stateDialog: MutableState<Boolean>
@@ -88,7 +98,6 @@ fun AddTransactionDialog(
                             contentDescription = "",
                             modifier = Modifier
                                 .padding(2.dp)
-                                .clickable { clickBack() }
                         )
                     }
                     Text(
@@ -213,13 +222,22 @@ fun AddTransactionDialog(
                 Button(
                     onClick = {
                         // TODO - call viewModel handle intent method
-//                    DataTransaction(
-//                        type = listTypeTransaction[selectedTypeIndex.value],
-//                        name = nameTicketValue.value,
-//                        quantity = quantityValue.value.toInt(),
-//                        dateTransaction = calendar,
-//                        price = priceValue.value.toDouble()
-//                    )
+                        try {
+                            val setData = Transaction(
+                                type = listTypeTransaction[selectedTypeIndex.value],
+                                name = nameTicketValue.value,
+                                quantity = quantityValue.value.toInt(),
+                                dateTransaction = calendar.time.time,
+                                price = priceValue.value.toDouble()
+                            )
+                            Log.d(LOG_TAG, setData.toString())
+                            viewModel.handleIntent(setData)
+
+                        }
+                        catch(e: Exception) {
+                            Log.d(LOG_TAG,"setData transaction error")
+                        }
+                        stateDialog.value = false
                     },
                     modifier = Modifier
                         .fillMaxWidth()

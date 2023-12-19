@@ -1,27 +1,35 @@
-package com.intinv.intinvapp.sections.portfolio
+package com.intinv.intinvapp.sections.portfolioDetail
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,10 +39,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.intinv.intinvapp.LOG_TAG
 import com.intinv.intinvapp.sections.transaction.AddTransactionDialog
 import com.intinv.intinvapp.R
 import com.intinv.intinvapp.domain.PortfolioDetail
 import com.intinv.intinvapp.domain.Transaction
+import com.intinv.intinvapp.sections.portfolio.domain.LoadPortfolio
+import com.intinv.intinvapp.sections.portfolioDetail.domain.LoadPortfolioDetail
+import com.intinv.intinvapp.sections.portfolioDetail.viewModel.PortfolioDetailViewModel
+import com.intinv.intinvapp.sections.transaction.viewModel.AddTransactionViewModel
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.AppYellow
 import com.intinv.intinvapp.ui.theme.inter
@@ -42,45 +55,25 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PortfolioDetailPage(
+    addTransactionViewModel: AddTransactionViewModel,
     navController: NavHostController,
+    viewModel: PortfolioDetailViewModel,
     selectedDetailName: String? = null,
-    // viewModel: PortfolioDetailViewModel TODO - implement
 ) {
     val cal = Calendar.getInstance()
     cal.time = Date(1565209665L)
 
-    // val screenState = viewModel.screenState.collectAsState().value TODO - implement
+    val screenState = viewModel.screenState.collectAsState().value
+    Log.d(LOG_TAG, "screenState = $screenState")
 
-    val tetsHist = Transaction(
-        type = "Buy",
-        name = "ACES",
-        dateTransaction = cal,
-        quantity = 2,
-        price = 1421321414.0
-    )
-
-    val data = PortfolioDetail(
-        ticket = "ACES",
-        fullName = "Ace Hardware Indonesia Tbk",
-        allocate = 700,
-        profValue = 5.0,
-        profDrop = 0.72,
-        userName = "Nilai",
-        allocateValue = 25.32,
-        lotValue = 26,
-        averagePriceValue = 760.96,
-        invValue = 0.72,
-        historyTransaction = listOf(
-            tetsHist,
-            tetsHist,
-            tetsHist,
-            tetsHist,
-            tetsHist,
-            tetsHist,
-            tetsHist
-        )
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = screenState.isLoading,
+        onRefresh = {
+            viewModel.handleIntent(LoadPortfolioDetail, selectedDetailName?:"")
+        }
     )
 
     val stateDialog = remember {
@@ -88,86 +81,110 @@ fun PortfolioDetailPage(
     }
     if (stateDialog.value && selectedDetailName != null) {
         AddTransactionDialog(
+            addTransactionViewModel,
             clickBack = {
-                stateDialog.value = false
+                navController.navigate("Portfolio")
             },
             stateDialog = stateDialog,
             nameTicket = selectedDetailName
         )
     } else {
-        // TODO - error dialog
+        if(stateDialog.value ) {
+            AlertDialog(modifier = Modifier.fillMaxWidth(),
+                onDismissRequest = { },
+                buttons = { },
+                title = {
+                    IconButton(
+                        onClick = { navController.navigate("Portfolio") }
+                    ) {
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(2.dp)
+                        )
+                    }
+                    Text(text = "Ошибка в получении данных.")
+                }
+            )
+        }
     }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.95f)
-            .background(Color.White)
-            .padding(20.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .pullRefresh(pullRefreshState)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.93F),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
+                .fillMaxHeight(0.95f)
+                .background(Color.White)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
-                modifier = Modifier,
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.93F),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start
             ) {
-                IconButton(onClick = { }) {
-                    Icon(
-                        Icons.Filled.ArrowBack,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .clickable {
-                                navController.popBackStack()
-                            }
+                Row(
+                    modifier = Modifier,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = { }) {
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .clickable {
+                                    navController.popBackStack()
+                                }
+                        )
+                    }
+                    Text(
+                        fontFamily = inter,
+                        fontSize = 16.0.sp,
+                        text = "Investment Detail"
                     )
                 }
-                Text(
-                    fontFamily = inter,
-                    fontSize = 16.0.sp,
-                    text = "Investment Detail"
-                )
+                screenState.portfolioDetailData?.let { data ->
+                    Title(
+                        modifier = Modifier.fillMaxWidth(),
+                        name = data.ticket,
+                        fullName = data.fullName,
+                        allocateValue = data.allocate,
+                        profValue = data.profValue,
+                        profDrop = data.profDrop
+                    )
+                    Detail(
+                        modifier = Modifier,
+                        userName = data.userName,
+                        allocateValue = data.allocateValue,
+                        lotValue = data.lotValue,
+                        averagePriceValue = data.averagePriceValue,
+                        invValue = data.invValue,
+                        profValue = data.profValue,
+                        profDrop = data.profDrop
+                    )
+                    History(data.historyTransaction)
+                }
             }
+            Button(
+                onClick = {
+                    stateDialog.value = true
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(PaddingValues(top = 5.dp)),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = AppYellow
+                )
 
-            Title(
-                modifier = Modifier.fillMaxWidth(),
-                name = data.ticket,
-                fullName = data.fullName,
-                allocateValue = data.allocate,
-                profValue = data.profValue,
-                profDrop = data.profDrop
-            )
-            Detail(
-                modifier = Modifier,
-                userName = data.userName,
-                allocateValue = data.allocateValue,
-                lotValue = data.lotValue,
-                averagePriceValue = data.averagePriceValue,
-                invValue = data.invValue,
-                profValue = data.profValue,
-                profDrop = data.profDrop
-            )
-            History(data.historyTransaction)
-        }
-        Button(
-            onClick = {
-                stateDialog.value = true
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(PaddingValues(top = 5.dp)),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = AppYellow
-            )
-
-        ) {
-            Text("Sell", fontSize = 18.sp)
+            ) {
+                Text("Sell", fontSize = 18.sp)
+            }
         }
     }
 }
@@ -329,12 +346,12 @@ fun Detail(
                 Text(
                     fontFamily = inter,
                     fontSize = 12.0.sp,
-                    text = invValue.toString() + " ₽"
+                    text = "$invValue ₽"
                 )
                 Text(
                     fontFamily = inter,
                     fontSize = 12.0.sp,
-                    text = profValue.toString() + " ₽" + " (" + profDrop.toString() + " %" + ")",
+                    text = "$profValue ₽ ($profDrop%)",
                     color = if (profValue > 0) Color.Green else Color.Red
                 )
             }
@@ -375,7 +392,7 @@ fun History(historyTransaction: List<Transaction>) {
             historyTransaction.forEach {
                 item {
                     itemHistory(
-                        dateTransaction = it.dateTransaction.time,
+                        dateTransaction = it.dateTransaction,
                         typeTransaction = it.type,
                         locValueTransaction = it.quantity,
                         invValueTransaction = it.price
@@ -388,13 +405,13 @@ fun History(historyTransaction: List<Transaction>) {
 
 @Composable
 fun itemHistory(
-    dateTransaction: Date,
+    dateTransaction: Long,
     typeTransaction: String,
     locValueTransaction: Int,
     invValueTransaction: Double
 ) {
     Column {
-        Text(text = SimpleDateFormat("dd MMMM yyyy").format(dateTransaction).toString())
+        Text(text = SimpleDateFormat("dd MMMM yyyy").format(Date(dateTransaction)).toString())
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween

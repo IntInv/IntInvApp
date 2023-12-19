@@ -1,5 +1,6 @@
 package com.intinv.intinvapp
 
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -31,30 +32,39 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.intinv.intinvapp.sections.quotes.QuotesPage
-import com.intinv.intinvapp.sections.portfolio.PortfolioDetailPage
 import com.intinv.intinvapp.sections.portfolio.PortfolioPage
 import com.intinv.intinvapp.sections.portfolio.viewModel.PortfolioViewModel
+import com.intinv.intinvapp.sections.portfolioDetail.PortfolioDetailPage
+import com.intinv.intinvapp.sections.portfolioDetail.domain.LoadPortfolioDetail
+import com.intinv.intinvapp.sections.portfolioDetail.viewModel.PortfolioDetailViewModel
+import com.intinv.intinvapp.sections.quotes.QuotesPage
+import com.intinv.intinvapp.sections.quotes.viewModel.QuotesViewModel
 import com.intinv.intinvapp.sections.transaction.AddTransactionDialog
+import com.intinv.intinvapp.sections.transaction.viewModel.AddTransactionViewModel
 import com.intinv.intinvapp.ui.theme.AppGray
 import com.intinv.intinvapp.ui.theme.inter
+
 
 @Composable
 fun NavigationMain(
     navHostController: NavHostController,
     activity: MainActivity
 ) {
+    val addTransactionViewModel by activity.viewModels<AddTransactionViewModel>()
     NavHost(
         navController = navHostController,
         startDestination = NavigationItem.Quotes.screen
     ) {
         composable(Screen.Quotes.label) {
-            // TODO - take viewModel and pass it
+            /* TODO - take viewModel and pass it */
+            val quotesViewModel by activity.viewModels<QuotesViewModel>()
             QuotesPage(
-                navHostController
+                addTransactionViewModel,
+                navHostController,
+                quotesViewModel
             )
         }
-        composable(NavigationItem.Portfolio.screen) {
+        composable(Screen.Portfolio.label) {
             val portfolioViewModel by activity.viewModels<PortfolioViewModel>()
             PortfolioPage(
                 navHostController,
@@ -65,17 +75,24 @@ fun NavigationMain(
             route = "${Screen.PortfolioDetail.label}/{detailName}",
             arguments = listOf(navArgument("detailName") { type = NavType.StringType })
         ) { backStackEntry ->
-            // TODO - take viewModel and pass it
+
+            val detailName = backStackEntry.arguments?.getString("detailName") ?: "kek"
+            Log.d(LOG_TAG, detailName)
+
+            val portfolioDetailViewModel by activity.viewModels<PortfolioDetailViewModel>()
+            portfolioDetailViewModel.handleIntent(LoadPortfolioDetail, detailName)
             PortfolioDetailPage(
+                addTransactionViewModel,
                 navHostController,
-                backStackEntry.arguments?.getString("detailName")
+                portfolioDetailViewModel,
+                detailName
             )
         }
     }
 }
 
 @Composable
-fun menuBar(navController: NavController) {
+fun menuBar(navController: NavController, activity: MainActivity) {
     val listButton = listOf(
         NavigationItem.Portfolio,
         NavigationItem.Transaction,
@@ -87,7 +104,9 @@ fun menuBar(navController: NavController) {
     }
 
     if (stateDialog.value) {
+        val addTransactionViewModel by activity.viewModels<AddTransactionViewModel>()
         AddTransactionDialog(
+            addTransactionViewModel,
             clickBack = {
                 stateDialog.value = false
             },

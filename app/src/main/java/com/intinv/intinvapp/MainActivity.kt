@@ -47,7 +47,10 @@ fun MainScreen(
 
     Scaffold(
         bottomBar = {
-            menuBar(navController = navController)
+            menuBar(
+                navController = navController,
+                activity = activity
+            )
         }
     ) {
         Box(

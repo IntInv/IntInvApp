@@ -2,6 +2,9 @@ package com.intinv.intinvapp.di
 
 import com.intinv.intinvapp.BuildConfig
 import com.intinv.intinvapp.sections.portfolio.network.PortfolioService
+import com.intinv.intinvapp.sections.portfolioDetail.network.PortfolioDetailService
+import com.intinv.intinvapp.sections.quotes.network.QuotesService
+import com.intinv.intinvapp.sections.transaction.network.AddTransactionService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,5 +45,23 @@ object NetworkModule {
     @Singleton
     fun providePortfolioService(retrofit: Retrofit): PortfolioService {
         return retrofit.create(PortfolioService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuotesService(retrofit: Retrofit): QuotesService {
+        return retrofit.create(QuotesService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePortfolioDetailService(retrofit: Retrofit): PortfolioDetailService {
+        return retrofit.create(PortfolioDetailService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddTransactionService(retrofit: Retrofit): AddTransactionService {
+        return retrofit.create(AddTransactionService::class.java)
     }
 }

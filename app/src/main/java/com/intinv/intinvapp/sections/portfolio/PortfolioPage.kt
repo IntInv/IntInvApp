@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +16,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -38,6 +35,7 @@ import com.intinv.intinvapp.LOG_TAG
 import com.intinv.intinvapp.Logo
 import com.intinv.intinvapp.R
 import com.intinv.intinvapp.Screen
+import com.intinv.intinvapp.domain.PortfolioTicket
 import com.intinv.intinvapp.sections.portfolio.domain.LoadPortfolio
 import com.intinv.intinvapp.sections.portfolio.viewModel.PortfolioViewModel
 import com.intinv.intinvapp.ui.theme.AppYellow
@@ -83,15 +81,17 @@ fun PortfolioPage(
                     Logo()
                 }
                 item {
-                    Portfolio( // TODO - use data from screenState.portfolioData
-                        fullValue = 3366924.0,
-                        fullProfLossValue = -37410.0,
-                        captioValue = -2.3,
-                        openValue = 23231.0
-                    )
+                    screenState.portfolioData?.let {
+                        Portfolio( // TODO - use data from screenState.portfolioData
+                            fullValue = it.fullValue,
+                            fullProfLossValue = it.fullProfLossValue,
+                            captioValue = it.captioValue,
+                            openValue = it.openValue
+                        )
+                    }
                 }
             }
-            PortfolioStockList(clickDetail)
+            PortfolioStockList(screenState.portfolioData?.listTicket ?: listOf(), clickDetail)
         }
 
         PullRefreshIndicator(
@@ -191,6 +191,7 @@ fun Portfolio(
 
 @Composable
 fun PortfolioStockList(
+    listTicket: List<PortfolioTicket>,
     clickDetail: (name: String) -> Unit
 ) {
     LazyColumn(
@@ -201,27 +202,19 @@ fun PortfolioStockList(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // TODO - screenState.StockItem.foreach
-        item {
-            PortfolioStockItem(
-                "GOTO",
-                "GoTo Gojek Tokopedia Tbk",
-                1674678.0,
-                -52742.0,
-                20.0,
-                clickDetail
-            )
+        listTicket.forEach{
+            item {
+                PortfolioStockItem(
+                    name = it.name,
+                    fullName = it.fullName,
+                    invValue = it.invValue,
+                    profValue = it.profValue,
+                    allocateValue = it.allocateValue,
+                    clickDetail
+                )
+            }
         }
-        item { PortfolioStockItem("PTBA", "Bukit Asam Tbk", 237588.0, 2765.0, 20.0, clickDetail) }
-        item {
-            PortfolioStockItem(
-                "ACES",
-                "Ace Hardware Indonesia Tbk",
-                1454658.0,
-                12567.0,
-                20.0,
-                clickDetail
-            )
-        }
+
     }
 }
 
@@ -232,7 +225,7 @@ fun PortfolioStockItem(
     fullName: String,
     invValue: Double,
     profValue: Double,
-    alocateValue: Double,
+    allocateValue: Double,
     clickDetail: (name: String) -> Unit
 ) {
     Column(modifier = Modifier
@@ -315,7 +308,7 @@ fun PortfolioStockItem(
             Text(
                 fontFamily = inter,
                 fontSize = 12.0.sp,
-                text = "$alocateValue Lot"
+                text = "$allocateValue Lot"
             )
         }
     }

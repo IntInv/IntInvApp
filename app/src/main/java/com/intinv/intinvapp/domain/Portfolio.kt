@@ -6,5 +6,5 @@ data class Portfolio(
     val fullProfLossValue: Double,
     val captioValue: Double,
     val openValue: Double,
-    val listTicket: List<Ticket>
+    val listTicket: List<PortfolioTicket>
 )
