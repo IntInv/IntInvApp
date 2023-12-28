@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
@@ -35,7 +36,6 @@ import com.intinv.intinvapp.sections.transaction.AddTransactionDialog
 import com.intinv.intinvapp.Logo
 import com.intinv.intinvapp.R
 import com.intinv.intinvapp.sections.quotes.domain.LoadQuotes
-import com.intinv.intinvapp.sections.quotes.network.QuotesService
 import com.intinv.intinvapp.sections.quotes.viewModel.QuotesViewModel
 import com.intinv.intinvapp.sections.transaction.viewModel.AddTransactionViewModel
 import com.intinv.intinvapp.ui.theme.inter
@@ -90,6 +90,12 @@ fun QuotesPage(
                 }
             }
         }
+
+        PullRefreshIndicator(
+            refreshing = screenState.isLoading,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 

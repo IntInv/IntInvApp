@@ -64,14 +64,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material")
-
-    implementation ("com.google.dagger:hilt-android:2.48")
-    kapt ("com.google.dagger:hilt-compiler:2.48")
-
     implementation ("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    kapt ("androidx.hilt:hilt-compiler:1.1.0")
 
     val nav_version = "2.7.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")
@@ -79,9 +73,6 @@ dependencies {
     // DI
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
-
-    implementation ("com.google.dagger:dagger-android-support:2.48")
-    kapt ("com.google.dagger:dagger-android-processor:2.48")
 
     // Network
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

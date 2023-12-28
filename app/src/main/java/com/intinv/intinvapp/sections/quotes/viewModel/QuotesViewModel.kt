@@ -6,6 +6,7 @@ import com.intinv.intinvapp.constants.DEFAULT_NETWORK_ERROR_TEXT
 import com.intinv.intinvapp.constants.DEFAULT_NETWORK_LOADING_TEXT
 import com.intinv.intinvapp.domain.Quotes
 import com.intinv.intinvapp.domain.Status
+import com.intinv.intinvapp.domain.Ticket
 import com.intinv.intinvapp.sections.quotes.domain.LoadQuotes
 import com.intinv.intinvapp.sections.quotes.domain.QuotesScreenIntent
 import com.intinv.intinvapp.sections.quotes.domain.QuotesScreenState
@@ -19,8 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuotesViewModel @Inject constructor(
-    private  val repository: QuotesRepository
-) : ViewModel(){
+    private val repository: QuotesRepository
+) : ViewModel() {
     private val _screenState: MutableStateFlow<QuotesScreenState> = MutableStateFlow(
         QuotesScreenState()
     )
@@ -30,30 +31,33 @@ class QuotesViewModel @Inject constructor(
         loadQuotesDataFromNet()
     }
 
-    fun handleIntent(intent: QuotesScreenIntent){
-        when (intent){
+    fun handleIntent(intent: QuotesScreenIntent) {
+        when (intent) {
             LoadQuotes -> {
                 loadQuotesDataFromNet()
             }
         }
     }
 
-    private fun loadQuotesDataFromNet(){
-        viewModelScope.launch(Dispatchers.IO){
-            repository.getQuotesRemote().collect{
+    private fun loadQuotesDataFromNet() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getQuotesRemote().collect {
                 val resultMessage = if (it.data is String) it.data else null
-                when (it.status){
+                when (it.status) {
                     Status.SUCCESS -> {
-                        if(it.data is Quotes){
-                            _screenState.value = _screenState.value.copy(
-                                isLoading = false,
-                                isError = false,
-                                isMessage = false,
-                                message = resultMessage ?: DEFAULT_NETWORK_LOADING_TEXT,
-                                quotesData = it.data
-                            )
-                        }
-                        else {
+                        if (it.data is List<*>) {
+                            if(it.data.firstOrNull() is Ticket) {
+                                _screenState.value = _screenState.value.copy(
+                                    isLoading = false,
+                                    isError = false,
+                                    isMessage = false,
+                                    message = resultMessage ?: DEFAULT_NETWORK_LOADING_TEXT,
+                                    quotesData = Quotes(
+                                        data = it.data as List<Ticket>
+                                    )
+                                )
+                            }
+                        } else {
                             _screenState.value = _screenState.value.copy(
                                 isLoading = false,
                                 isError = true,
